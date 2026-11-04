@@ -927,9 +927,7 @@ export default function App() {
   const [soundEnabled, setSoundEnabled] = useState(false);
 
   // Profil personnalisable en direct
-  const [profile, setProfile] = useState(DEFAULT_PROFILE_CONFIG);
-  const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
-  const [copiedConfig, setCopiedConfig] = useState(false);
+  const profile = DEFAULT_PROFILE_CONFIG;
 
   // État API GitHub Live
   const [githubUser, setGithubUser] = useState(null);
@@ -1175,13 +1173,6 @@ export default function App() {
     setTimeout(() => setTransmissionSent(false), 6000);
   };
 
-  const copyProfileJson = () => {
-    navigator.clipboard?.writeText(JSON.stringify(profile, null, 2));
-    soundFX.playSuccess();
-    setCopiedConfig(true);
-    setTimeout(() => setCopiedConfig(false), 2500);
-  };
-
   return (
     <div className={`min-h-screen ${theme.bgPrimary} text-slate-100 relative selection:bg-emerald-500 selection:text-slate-950 font-sans overflow-x-hidden`}>
       {/* Fond Canvas Interactif */}
@@ -1277,18 +1268,6 @@ export default function App() {
               title={soundEnabled ? 'Effets sonores tactiques activés' : 'Activer les effets sonores tactiques'}
             >
               {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-            </button>
-
-            {/* Bouton Studio de Personnalisation */}
-            <button
-              onClick={() => {
-                soundFX.playScan();
-                setIsCustomizerOpen(true);
-              }}
-              className={`px-3 py-2 rounded-xl text-xs font-mono font-semibold flex items-center gap-1.5 border ${theme.accentSoft} hover:scale-[1.02] transition`}
-            >
-              <Sliders className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Personnaliser</span>
             </button>
           </div>
         </div>
@@ -2145,113 +2124,6 @@ export default function App() {
                 <Github className="w-4 h-4" />
                 Ouvrir le Dépôt GitHub
               </a>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* =================================================================== */}
-      {/* DRAWER : STUDIO DE PERSONNALISATION EN DIRECT                       */}
-      {/* =================================================================== */}
-      {isCustomizerOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex justify-end">
-          <div className="w-full max-w-md bg-slate-900 border-l border-slate-800 h-full p-6 overflow-y-auto flex flex-col justify-between space-y-6">
-            <div className="space-y-5">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-                <div>
-                  <h3 className="font-mono font-bold text-white text-base flex items-center gap-2">
-                    <Sliders className={`w-4 h-4 ${theme.accentText}`} />
-                    Studio Live // Personnaliser
-                  </h3>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    Adaptez instantanément les textes de votre portfolio et copiez la configuration.
-                  </p>
-                </div>
-                <button
-                  onClick={() => setIsCustomizerOpen(false)}
-                  className="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              <div className="space-y-4 text-xs font-mono">
-                <div>
-                  <label className="block text-slate-400 mb-1">NOM D'AFFICHAGE (TITRE HERO)</label>
-                  <input
-                    type="text"
-                    value={profile.displayName}
-                    onChange={(e) => setProfile({ ...profile, displayName: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">VOTRE RÔLE / SPÉCIALITÉ</label>
-                  <input
-                    type="text"
-                    value={profile.role}
-                    onChange={(e) => setProfile({ ...profile, role: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">ACCROCHE PRINCIPALE (TAGLINE)</label>
-                  <textarea
-                    rows={2}
-                    value={profile.tagline}
-                    onChange={(e) => setProfile({ ...profile, tagline: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">BIOGRAPHIE / MANIFESTE</label>
-                  <textarea
-                    rows={4}
-                    value={profile.bio}
-                    onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">LOCALISATION</label>
-                  <input
-                    type="text"
-                    value={profile.location}
-                    onChange={(e) => setProfile({ ...profile, location: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">EMAIL DE CONTACT</label>
-                  <input
-                    type="text"
-                    value={profile.email}
-                    onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-800 space-y-2">
-              <button
-                onClick={copyProfileJson}
-                className={`w-full py-2.5 px-4 rounded-xl font-mono text-xs font-bold ${theme.accentBg} text-slate-950 flex items-center justify-center gap-2`}
-              >
-                {copiedConfig ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                {copiedConfig ? 'Configuration JSON Copiée !' : 'Copier ma Configuration JSON'}
-              </button>
-              <button
-                onClick={() => setProfile(DEFAULT_PROFILE_CONFIG)}
-                className="w-full py-2 px-4 rounded-xl font-mono text-xs bg-slate-800 hover:bg-slate-700 text-slate-300"
-              >
-                Réinitialiser par défaut
-              </button>
             </div>
           </div>
         </div>
