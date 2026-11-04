@@ -406,9 +406,11 @@ const CURATED_PROJECTS = [
   }
 ];
 
-// Niveau de maîtrise déclaré : intermédiaire pour l'ensemble des compétences
-const SKILL_LEVEL_LABEL = 'Intermédiaire';
-const SKILL_LEVEL_PERCENT = 55;
+// Niveaux de maîtrise déclarés (barre de progression associée)
+const SKILL_LEVELS = {
+  intermediaire: { label: 'Intermédiaire', percent: 55 },
+  avance: { label: 'Avancé', percent: 80 }
+};
 
 const SKILL_DOMAINS = [
   {
@@ -416,11 +418,11 @@ const SKILL_DOMAINS = [
     name: 'Développement Web & Mobile',
     icon: Layers,
     skills: [
-      { name: 'TypeScript, JavaScript, Python', tag: 'Langages' },
-      { name: 'C++, HTML', tag: 'Bases' },
-      { name: 'React, Tailwind CSS', tag: 'Web' },
-      { name: 'Flutter, Dart', tag: 'Mobile' },
-      { name: 'Django', tag: 'Backend' }
+      { name: 'TypeScript, JavaScript, Python', tag: 'Langages', level: 'intermediaire' },
+      { name: 'HTML', tag: 'Web', level: 'avance' },
+      { name: 'React, Tailwind CSS', tag: 'Web', level: 'intermediaire' },
+      { name: 'Flutter, Dart, C++', tag: 'Mobile', level: 'intermediaire' },
+      { name: 'Django', tag: 'Backend', level: 'intermediaire' }
     ]
   },
   {
@@ -428,10 +430,10 @@ const SKILL_DOMAINS = [
     name: 'Bases de Données & Systèmes',
     icon: Server,
     skills: [
-      { name: 'SQL (MySQL, PostgreSQL)', tag: 'SQL' },
-      { name: 'NoSQL (MongoDB)', tag: 'NoSQL' },
-      { name: 'Linux (Ubuntu, Kali), Windows, Multi-boot', tag: 'Systèmes' },
-      { name: 'Git, GitHub, dépôts collaboratifs', tag: 'Workflow' }
+      { name: 'SQL (MySQL, PostgreSQL)', tag: 'SQL', level: 'intermediaire' },
+      { name: 'NoSQL (MongoDB)', tag: 'NoSQL', level: 'intermediaire' },
+      { name: 'Linux (Ubuntu, Kali), Windows, Multi-boot', tag: 'Systèmes', level: 'avance' },
+      { name: 'Git, GitHub, dépôts collaboratifs', tag: 'Workflow', level: 'avance' }
     ]
   },
   {
@@ -439,10 +441,10 @@ const SKILL_DOMAINS = [
     name: 'Réseaux, Sécurité & Création',
     icon: Shield,
     skills: [
-      { name: 'Fondamentaux réseaux', tag: 'Réseaux' },
-      { name: 'Notions d’audit de sécurité', tag: 'Sécurité' },
-      { name: 'Canva, Photoshop', tag: 'Design' },
-      { name: 'Marketing, communication digitale, réseaux sociaux', tag: 'Com' }
+      { name: 'Fondamentaux réseaux', tag: 'Réseaux', level: 'intermediaire' },
+      { name: 'Notions d’audit de sécurité', tag: 'Sécurité', level: 'intermediaire' },
+      { name: 'Canva, Photoshop, Illustrator', tag: 'Design', level: 'intermediaire' },
+      { name: 'Marketing, communication digitale, réseaux sociaux', tag: 'Com', level: 'avance' }
     ]
   }
 ];
@@ -1742,13 +1744,13 @@ export default function App() {
                           <div className="flex items-center justify-between gap-3 text-xs font-mono mb-1.5">
                             <span className="text-slate-200">{skill.name}</span>
                             <span className="shrink-0 text-slate-400 text-[11px]">
-                              [{skill.tag}] {SKILL_LEVEL_LABEL}
+                              [{skill.tag}] {SKILL_LEVELS[skill.level].label}
                             </span>
                           </div>
                           <div className="w-full h-2 rounded-full bg-slate-950 overflow-hidden p-0.5 border border-slate-800">
                             <div
                               className={`h-full rounded-full ${theme.accentBg} transition-all duration-700`}
-                              style={{ width: `${SKILL_LEVEL_PERCENT}%` }}
+                              style={{ width: `${SKILL_LEVELS[skill.level].percent}%` }}
                             />
                           </div>
                         </div>
@@ -1757,8 +1759,8 @@ export default function App() {
                   </div>
 
                   <div className="mt-6 pt-4 border-t border-slate-800/70 flex items-center justify-between text-[11px] font-mono text-slate-400">
-                    <span>NIVEAU GLOBAL</span>
-                    <span className={theme.accentText}>INTERMÉDIAIRE</span>
+                    <span>NIVEAUX DÉCLARÉS</span>
+                    <span className={theme.accentText}>INTERMÉDIAIRE / AVANCÉ</span>
                   </div>
                 </div>
               );
