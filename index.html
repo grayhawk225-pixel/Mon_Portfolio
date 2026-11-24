@@ -1,29 +1,1064 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-register="claire">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#020617" />
+    <meta name="theme-color" content="#eef1f5" id="meta-theme-color" />
     <meta
       name="description"
-      content="Portfolio de Moïse Onikoyamou — étudiant en L2 TWIN à l’ESATIC (Abidjan), développeur web et mobile : React, TypeScript, Flutter, Python."
+      content="Portfolio interactif de Moïse Onikoyamou — Étudiant L2 TWIN (ESATIC, Abidjan), développeur Web & Mobile : React, TypeScript, Flutter, Python."
     />
-    <meta property="og:title" content="Moïse Onikoyamou — Portfolio" />
+    <meta property="og:title" content="Moïse Onikoyamou — Atelier Optique & Portfolio TWIN" />
     <meta
       property="og:description"
-      content="Étudiant L2 TWIN (ESATIC) • Développeur Web & Mobile. Projets, compétences et contact."
+      content="Étudiant L2 TWIN (ESATIC) • Développeur Web & Mobile. Banc optique, projets GitHub, compétences et atelier interactif."
     />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="fr_FR" />
     <link
       rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23020617'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%2334d399' stroke-width='2.5'/%3E%3Cpath d='M16 3v6M16 23v6M3 16h6M23 16h6' stroke='%2334d399' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231d3aa8'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23f4f6fa' stroke-width='2.2'/%3E%3Cpath d='M16 4v5M16 23v5M4 16h5M23 16h5' stroke='%23f4f6fa' stroke-width='2.2' stroke-linecap='square'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23df471f'/%3E%3C/svg%3E"
     />
+    <link rel="preload" href="./fonts/anybody-variable.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="./fonts/golos-text-variable.woff2" as="font" type="font/woff2" crossorigin />
-    <title>Moïse Onikoyamou — Portfolio</title>
+    <link rel="preload" href="./fonts/martian-mono-variable.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="./css/atelier.css" />
+    <title>Moïse Onikoyamou — Portfolio TWIN // Banc Optique</title>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- Filtre SVG grain papier archival (zéro asset externe) -->
+    <svg class="sr-only" aria-hidden="true" focusable="false">
+      <defs>
+        <filter id="paper-grain" x="0%" y="0%" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="3" stitchTiles="stitch" result="noise" />
+          <feColorMatrix type="saturate" values="0" in="noise" />
+        </filter>
+      </defs>
+    </svg>
+
+    <div class="paper-overlay" aria-hidden="true"></div>
+
+    <a href="#contenu" class="skip-link">Aller au contenu principal</a>
+
+    <!-- =================================================================== -->
+    <!-- RAIL SUPÉRIEUR CALIBRÉ (NAVIGATION + 3 REGISTRES OKLCH + AUDIO)     -->
+    <!-- =================================================================== -->
+    <header class="site-header" id="top">
+      <div class="shell header-row">
+        <a href="#top" class="brand-mark" aria-label="Accueil — Moïse Onikoyamou">
+          <span class="brand-reticle" aria-hidden="true">
+            <svg viewBox="0 0 28 28" width="24" height="24" fill="none">
+              <circle cx="14" cy="14" r="9" stroke="currentColor" stroke-width="1.6" />
+              <line x1="14" y1="2" x2="14" y2="7" stroke="currentColor" stroke-width="1.6" />
+              <line x1="14" y1="21" x2="14" y2="26" stroke="currentColor" stroke-width="1.6" />
+              <line x1="2" y1="14" x2="7" y2="14" stroke="currentColor" stroke-width="1.6" />
+              <line x1="21" y1="14" x2="26" y2="14" stroke="currentColor" stroke-width="1.6" />
+              <circle cx="14" cy="14" r="2.2" fill="var(--signal)" />
+            </svg>
+          </span>
+          <span class="brand-text">
+            <span class="brand-name">GRAYHAWK <span class="brand-code"><span class="brand-sep">//</span> 225-PIXEL</span></span>
+            <span class="brand-sub">MOÏSE ONIKOYAMOU · ESATIC ABIDJAN</span>
+          </span>
+        </a>
+
+        <nav class="primary-nav" aria-label="Navigation principale">
+          <a href="#apropos">À propos</a>
+          <a href="#projets">Projets</a>
+          <a href="#competences">Compétences</a>
+          <a href="#atelier">Atelier</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <div class="header-controls">
+          <div class="register-switch" role="group" aria-label="Registre chromatique">
+            <button
+              type="button"
+              class="reg-btn"
+              data-set-register="claire"
+              aria-pressed="true"
+              title="Chambre Claire — Papier technique & Cobalt / Vermillon"
+            >
+              Claire
+            </button>
+            <button
+              type="button"
+              class="reg-btn"
+              data-set-register="alu"
+              aria-pressed="false"
+              title="Banc Alu — Aluminium anodisé & Émeraude / Laiton"
+            >
+              Alu
+            </button>
+            <button
+              type="button"
+              class="reg-btn"
+              data-set-register="noire"
+              aria-pressed="false"
+              title="Chambre Noire — Basalte minéral & Ambre / Cyan"
+            >
+              Noire
+            </button>
+          </div>
+
+          <button
+            type="button"
+            id="audio-toggle"
+            class="icon-btn"
+            aria-pressed="false"
+            aria-label="Activer les retours sonores tactiles"
+            title="Audio tactile (OFF par défaut)"
+          >
+            <span class="audio-dot" aria-hidden="true"></span>
+            <span id="audio-label">Audio OFF</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Barre mobile fluide (zéro débordement 375px / 768px) -->
+      <nav class="mobile-nav" aria-label="Navigation mobile">
+        <a href="#apropos">À propos</a>
+        <a href="#projets">Projets</a>
+        <a href="#competences">Compétences</a>
+        <a href="#atelier">Atelier</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="contenu">
+      <!-- ================================================================= -->
+      <!-- SECTION 1 : HERO — BANC OPTIQUE & LOUPE X-RAY (Z-PATTERN)         -->
+      <!-- ================================================================= -->
+      <section class="hero-section">
+        <div class="shell hero-grid">
+          <!-- Colonne Éditoriale Gauche (Z-pattern : ancre -> titre -> actions) -->
+          <div class="hero-copy">
+            <div class="status-strip">
+              <span class="status-led" aria-hidden="true"></span>
+              <span class="mono-label">ÉTUDIANT L2 TWIN • ESATIC • OUVERT AUX STAGES</span>
+              <span class="status-sep" aria-hidden="true">/</span>
+              <span class="mono-label muted">ABIDJAN, CÔTE D’IVOIRE · UTC+0</span>
+            </div>
+
+            <div class="hero-title-wrap">
+              <h1 class="display-title" id="hero-display-name">
+                MOÏSE<br />ONIKOYAMOU
+              </h1>
+              <p class="hero-role">
+                Étudiant L2 TWIN (ESATIC) &middot; Développeur Web &amp; Mobile
+              </p>
+            </div>
+
+            <p class="hero-tagline">
+              Étudiant en Technologies Web et Image Numérique, je construis des interfaces et des
+              applications concrètes avec React, TypeScript, Flutter et Python.
+            </p>
+
+            <div class="hero-actions">
+              <a href="#projets" class="btn btn-primary">
+                Explorer les 7 dépôts GitHub
+              </a>
+              <a
+                href="https://github.com/grayhawk225-pixel"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-secondary"
+              >
+                github.com/grayhawk225-pixel
+              </a>
+              <a href="#contact" class="btn btn-ghost">
+                Proposer un stage
+              </a>
+            </div>
+
+            <!-- Bandeau de métriques factuelles calibrées -->
+            <dl class="hero-metrics" aria-label="Repères factuels">
+              <div class="metric-cell">
+                <dt>DÉPÔTS PUBLICS</dt>
+                <dd id="metric-repos-count">7</dd>
+              </div>
+              <div class="metric-cell">
+                <dt>CURSUS ACTUEL</dt>
+                <dd>L2 TWIN</dd>
+              </div>
+              <div class="metric-cell">
+                <dt>BASE</dt>
+                <dd>ABIDJAN #225</dd>
+              </div>
+              <div class="metric-cell">
+                <dt>DISPONIBILITÉ</dt>
+                <dd class="accent-val">IMMÉDIATE</dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Colonne Instrumentale Droite : Banc Optique & Loupe X-Ray -->
+          <div class="optical-bench" aria-label="Banc optique interactif avec loupe X-Ray">
+            <div class="bench-bar">
+              <div class="bench-bar-left">
+                <span class="mono-tag">PLANCHE OPTIQUE // TWIN-225</span>
+                <span class="mono-readout" id="loupe-coords">X 220 mm · Y 140 mm</span>
+              </div>
+              <div class="bench-bar-right">
+                <button
+                  type="button"
+                  id="xray-full-toggle"
+                  class="chip-btn"
+                  aria-pressed="false"
+                >
+                  Radiographie pleine
+                </button>
+              </div>
+            </div>
+
+            <div class="xray-stage" id="xray-stage" tabindex="0" aria-label="Planche d'inspection optique — déplacez la souris, touchez ou utilisez les préréglages ci-dessous">
+              <!-- Champ interférométrique Canvas 2D réactif au pointeur -->
+              <canvas id="field-canvas" class="field-canvas" aria-hidden="true"></canvas>
+
+              <!-- COUCHE DE BASE (SURFACE ÉDITORIALE & PORTRAIT STUDIO) -->
+              <div class="xray-layer xray-base">
+                <div class="specimen-top-marks" aria-hidden="true">
+                  <span>REF. GH-225-MO</span>
+                  <span>ÉCHELLE 1:1 · OKLCH</span>
+                </div>
+
+                <div class="specimen-core">
+                  <figure class="portrait-plate">
+                    <div class="portrait-frame">
+                      <img
+                        src="./assets/photo.jpg"
+                        alt="Portrait studio de Moïse Onikoyamou"
+                        width="720"
+                        height="720"
+                        decoding="async"
+                      />
+                    </div>
+                    <figcaption class="mono-caption">
+                      <span>MOÏSE ONIKOYAMOU</span>
+                      <span>@grayhawk225-pixel</span>
+                    </figcaption>
+                  </figure>
+
+                  <div class="specimen-card-info">
+                    <span class="mono-eyebrow">IDENTITÉ OPÉRATIONNELLE</span>
+                    <div class="specimen-headline">Web, Mobile &amp; Image Numérique</div>
+                    <ul class="specimen-list">
+                      <li><strong>École :</strong> ESATIC — Abidjan</li>
+                      <li><strong>Filière :</strong> Licence 2 TWIN (2026–2027)</li>
+                      <li><strong>Objectif :</strong> Stage &amp; projets collaboratifs</li>
+                      <li><strong>GitHub :</strong> Membre depuis février 2026</li>
+                    </ul>
+                    <div class="specimen-hint">
+                      Passez la loupe sur la planche pour inspecter la couche technique TWIN.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="specimen-ruler" aria-hidden="true">
+                  <span>00</span><span>20</span><span>40</span><span>60</span><span>80</span><span>100</span>
+                </div>
+              </div>
+
+              <!-- COUCHE X-RAY / BLUEPRINT RÉVÉLÉE PAR LA LOUPE -->
+              <div class="xray-layer xray-blueprint" id="xray-blueprint" aria-hidden="true">
+                <svg class="blueprint-grid-svg" viewBox="0 0 600 440" preserveAspectRatio="none">
+                  <defs>
+                    <pattern id="bp-subgrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.22" />
+                    </pattern>
+                    <pattern id="bp-grid" width="100" height="100" patternUnits="userSpaceOnUse">
+                      <rect width="100" height="100" fill="url(#bp-subgrid)" />
+                      <path d="M 100 0 L 0 0 0 100" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45" />
+                    </pattern>
+                  </defs>
+                  <rect width="600" height="440" fill="url(#bp-grid)" />
+                  <circle cx="152" cy="196" r="96" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 4" />
+                  <circle cx="152" cy="196" r="118" fill="none" stroke="var(--signal)" stroke-width="1" opacity="0.8" />
+                  <line x1="25" y1="196" x2="575" y2="196" stroke="currentColor" stroke-width="0.9" stroke-dasharray="3 5" opacity="0.5" />
+                  <line x1="152" y1="24" x2="152" y2="410" stroke="currentColor" stroke-width="0.9" stroke-dasharray="3 5" opacity="0.5" />
+                  <path d="M 254 148 L 298 118 L 560 118" fill="none" stroke="var(--signal)" stroke-width="1.3" />
+                  <circle cx="254" cy="148" r="3.5" fill="var(--signal)" />
+                  <path d="M 244 252 L 298 288 L 560 288" fill="none" stroke="currentColor" stroke-width="1.3" />
+                  <circle cx="244" cy="252" r="3.5" fill="currentColor" />
+                </svg>
+
+                <div class="bp-content">
+                  <div class="bp-top-row">
+                    <span>COUCHE X-RAY // SPÉCIFICATIONS TWIN</span>
+                    <span id="bp-register-token">OKLCH · L 0.962 · C 0.006</span>
+                  </div>
+
+                  <div class="bp-callout bp-callout-portrait">
+                    <span class="bp-tag">CAPTEUR PORTRAIT 720×720</span>
+                    <strong>CADRE CALIBRÉ NEUTRE</strong>
+                    <span>Zéro filtre destructif · 1:1</span>
+                  </div>
+
+                  <div class="bp-callout bp-callout-stack">
+                    <span class="bp-tag">STACK DÉCLARÉE</span>
+                    <strong>TS · JS · PYTHON · DART · C++</strong>
+                    <span>React · Flutter · Django · SQL · Linux</span>
+                  </div>
+
+                  <div class="bp-callout bp-callout-gh">
+                    <span class="bp-tag">TÉLÉMÉTRIE GITHUB</span>
+                    <strong id="bp-gh-summary">7 DÉPÔTS PUBLICS · 2026</strong>
+                    <span>PixR · TikTask · Ivoire-Bio-AXE · TaskLab</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Réticule circulaire de la loupe -->
+              <div class="loupe-reticle" id="loupe-reticle" aria-hidden="true">
+                <span class="reticle-cross-h"></span>
+                <span class="reticle-cross-v"></span>
+                <span class="reticle-tag">OPT·225</span>
+              </div>
+            </div>
+
+            <!-- Commandes clavier / tactiles paritaires de la loupe -->
+            <div class="bench-controls">
+              <div class="preset-group" role="group" aria-label="Points focaux de la loupe">
+                <button type="button" class="preset-btn" data-focus="portrait">
+                  Portrait
+                </button>
+                <button type="button" class="preset-btn is-active" data-focus="stack">
+                  Stack TWIN
+                </button>
+                <button type="button" class="preset-btn" data-focus="github">
+                  GitHub Live
+                </button>
+              </div>
+
+              <label class="aperture-control" for="loupe-radius">
+                <span class="mono-label">Ouverture</span>
+                <input
+                  id="loupe-radius"
+                  type="range"
+                  min="72"
+                  max="170"
+                  step="2"
+                  value="96"
+                />
+                <span class="mono-readout" id="loupe-radius-val">96px</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- SECTION 2 : À PROPOS & RÈGLE CHRONOLOGIQUE CALIBRÉE               -->
+      <!-- ================================================================= -->
+      <section class="section-band" id="apropos">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">DOSSIER INDIVIDUEL // ESATIC — ABIDJAN</p>
+              <h2 class="section-title">Qui suis-je ?</h2>
+            </div>
+            <p class="section-note">
+              Rigueur académique, projets concrets et goût du détail en développement web, mobile et image numérique.
+            </p>
+          </div>
+
+          <div class="about-grid">
+            <!-- Présentation, Qualités, Langues, Intérêts -->
+            <article class="panel about-bio-panel">
+              <h3 class="panel-title">Profil &amp; démarche</h3>
+              <p class="body-copy">
+                Étudiant en Licence 2 filière TWIN (Technologies Web et Image Numérique) à l'ESATIC,
+                rigoureux et passionné par les technologies du numérique. Je combine théorie académique
+                et réalisation de projets concrets (développement web, conception d'interfaces,
+                traitement de l'image numérique). À la recherche d'opportunités académiques et
+                professionnelles (stage, projets collaboratifs) pour appliquer mon savoir-faire
+                technique.
+              </p>
+
+              <div class="about-subgrid">
+                <div class="sub-block">
+                  <h4 class="sub-heading">Qualités</h4>
+                  <ul class="tag-list">
+                    <li class="pill-tag accent">Très bon relationnel</li>
+                    <li class="pill-tag accent">Discipliné</li>
+                    <li class="pill-tag accent">Rigoureux</li>
+                  </ul>
+                </div>
+
+                <div class="sub-block">
+                  <h4 class="sub-heading">Langues</h4>
+                  <dl class="lang-list">
+                    <div class="lang-row">
+                      <dt>Français</dt>
+                      <dd>Niveau professionnel</dd>
+                    </div>
+                    <div class="lang-row">
+                      <dt>Anglais</dt>
+                      <dd>Niveau intermédiaire</dd>
+                    </div>
+                    <div class="lang-row">
+                      <dt>Espagnol</dt>
+                      <dd>Niveau intermédiaire</dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+
+              <div class="sub-block mt-block">
+                <h4 class="sub-heading">Centres d’intérêt</h4>
+                <ul class="tag-list">
+                  <li class="pill-tag">Sport</li>
+                  <li class="pill-tag">Veille technologique</li>
+                  <li class="pill-tag">Ingénierie logicielle</li>
+                  <li class="pill-tag">Jeux vidéo tactiques &amp; émulation</li>
+                  <li class="pill-tag">Musique</li>
+                </ul>
+              </div>
+            </article>
+
+            <!-- Parcours académique avec Règle Chronologique interactive -->
+            <article class="panel timeline-panel">
+              <div class="panel-head-inline">
+                <h3 class="panel-title">Parcours académique</h3>
+                <span class="mono-tag">2022 — 2027</span>
+              </div>
+
+              <div class="timeline-ruler" role="tablist" aria-label="Sélectionner une étape du parcours">
+                <button type="button" class="ruler-tick is-active" role="tab" aria-selected="true" data-edu="0">
+                  2026–27
+                </button>
+                <button type="button" class="ruler-tick" role="tab" aria-selected="false" data-edu="1">
+                  2025–26
+                </button>
+                <button type="button" class="ruler-tick" role="tab" aria-selected="false" data-edu="2">
+                  2025
+                </button>
+                <button type="button" class="ruler-tick" role="tab" aria-selected="false" data-edu="3">
+                  2022
+                </button>
+              </div>
+
+              <ol class="timeline-list" id="timeline-list">
+                <li class="timeline-item is-active" data-edu-item="0">
+                  <span class="timeline-year">2026 – 2027</span>
+                  <strong class="timeline-degree">Licence 2 (L2) — TWIN</strong>
+                  <span class="timeline-place">ESATIC — Abidjan</span>
+                  <span class="timeline-detail">Technologies Web et Image Numérique</span>
+                </li>
+                <li class="timeline-item" data-edu-item="1">
+                  <span class="timeline-year">2025 – 2026</span>
+                  <strong class="timeline-degree">Licence 1 (L1) — TWIN</strong>
+                  <span class="timeline-place">ESATIC — Abidjan</span>
+                  <span class="timeline-detail">Technologies Web et Image Numérique</span>
+                </li>
+                <li class="timeline-item" data-edu-item="2">
+                  <span class="timeline-year">2025</span>
+                  <strong class="timeline-degree">Baccalauréat Scientifique</strong>
+                  <span class="timeline-place">Collège Privé Les Cartésiens — Abidjan</span>
+                </li>
+                <li class="timeline-item" data-edu-item="3">
+                  <span class="timeline-year">2022</span>
+                  <strong class="timeline-degree">BEPC</strong>
+                  <span class="timeline-place">Collège Pierre et Marie Curie — Abidjan</span>
+                </li>
+              </ol>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- SECTION 3 : PROJETS RÉELS GITHUB & INSPECTEUR RISOGRAPHIE         -->
+      <!-- ================================================================= -->
+      <section class="section-band" id="projets">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">RÉPERTOIRE PUBLIC // GITHUB.COM/GRAYHAWK225-PIXEL</p>
+              <h2 class="section-title">Projets &amp; Dépôts Déployés</h2>
+            </div>
+            <div class="sync-cluster">
+              <span class="mono-readout" id="github-sync-status">7 dépôts publics vérifiés</span>
+              <button type="button" id="github-sync-btn" class="btn btn-secondary btn-compact">
+                Actualiser depuis GitHub
+              </button>
+            </div>
+          </div>
+
+          <!-- Barre de filtres F-pattern -->
+          <div class="projects-toolbar">
+            <label class="search-field" for="project-search">
+              <span class="sr-only">Rechercher un projet par nom, langage ou sujet</span>
+              <input
+                id="project-search"
+                type="search"
+                placeholder="Filtrer par nom, langage (TypeScript, Kotlin, Python, Dart)..."
+              />
+            </label>
+
+            <div class="filter-pills" id="project-filters" role="group" aria-label="Filtrer par technologie">
+              <button type="button" class="filter-pill is-active" data-filter="Tous" aria-pressed="true">
+                Tous (7)
+              </button>
+              <button type="button" class="filter-pill" data-filter="TypeScript" aria-pressed="false">
+                TypeScript
+              </button>
+              <button type="button" class="filter-pill" data-filter="Python" aria-pressed="false">
+                Python
+              </button>
+              <button type="button" class="filter-pill" data-filter="Kotlin" aria-pressed="false">
+                Kotlin
+              </button>
+              <button type="button" class="filter-pill" data-filter="Dart" aria-pressed="false">
+                Dart
+              </button>
+              <button type="button" class="filter-pill" data-filter="Web & Skill" aria-pressed="false">
+                Web &amp; Skill
+              </button>
+            </div>
+          </div>
+
+          <div class="projects-grid" id="projects-grid" aria-live="polite">
+            <!-- Injecté par js/atelier.js à partir des 7 dépôts réels -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- SECTION 4 : PATCHBAY VERLET & MATRICE DE COMPÉTENCES              -->
+      <!-- ================================================================= -->
+      <section class="section-band" id="competences">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">CAPACITÉS OPÉRATIONNELLES // NIVEAUX DÉCLARÉS</p>
+              <h2 class="section-title">ADN Technique &amp; Patchbay</h2>
+            </div>
+            <p class="section-note">
+              Pincez ou tirez un câble du banc pour relier chaque domaine technique à son pilier d’ingénierie.
+            </p>
+          </div>
+
+          <!-- Instrument Verlet Patchbay reliant Domaines <-> Piliers -->
+          <div class="patchbay-panel panel">
+            <div class="bench-bar">
+              <div class="bench-bar-left">
+                <span class="mono-tag">PATCHBAY PHYSIQUE // CÂBLES VERLET 2D</span>
+                <span class="mono-readout" id="patchbay-telemetry">TENSION : 0.00 N · CÂBLE ACTIF : TOUS</span>
+              </div>
+              <div class="patchbay-actions" role="group" aria-label="Pincer les câbles au clavier">
+                <button type="button" class="chip-btn" data-pluck="0">Pincer 1 · Web/Mobile</button>
+                <button type="button" class="chip-btn" data-pluck="1">Pincer 2 · Systèmes</button>
+                <button type="button" class="chip-btn" data-pluck="2">Pincer 3 · Sécurité/UI</button>
+              </div>
+            </div>
+
+            <div class="patchbay-stage" id="patchbay-stage">
+              <div class="patch-col patch-left">
+                <button type="button" class="patch-node is-selected" data-domain-idx="0">
+                  <span class="patch-port">IN·A</span>
+                  <strong>Développement Web &amp; Mobile</strong>
+                  <span>TS, JS, Python, HTML, React, Flutter, Django</span>
+                </button>
+                <button type="button" class="patch-node" data-domain-idx="1">
+                  <span class="patch-port">IN·B</span>
+                  <strong>Bases de Données &amp; Systèmes</strong>
+                  <span>MySQL, PostgreSQL, MongoDB, Linux, Git</span>
+                </button>
+                <button type="button" class="patch-node" data-domain-idx="2">
+                  <span class="patch-port">IN·C</span>
+                  <strong>Réseaux, Sécurité &amp; Création</strong>
+                  <span>Réseaux, Audit, Design, Communication</span>
+                </button>
+              </div>
+
+              <div class="patch-canvas-wrap">
+                <canvas id="verlet-canvas" aria-hidden="true"></canvas>
+                <span class="patch-hint mono-label">Glissez ou cliquez sur les cordes</span>
+              </div>
+
+              <div class="patch-col patch-right">
+                <div class="pillar-card is-selected" data-pillar-idx="0">
+                  <span class="patch-port">OUT·1</span>
+                  <h3>GRAYHAWK · Vision &amp; Architecture</h3>
+                  <p>
+                    Prendre de la hauteur sur la complexité système pour concevoir du code modulaire,
+                    maintenable et sans dette cachée.
+                  </p>
+                </div>
+                <div class="pillar-card" data-pillar-idx="1">
+                  <span class="patch-port">OUT·2</span>
+                  <h3>CODE #225 · Résilience &amp; Audace</h3>
+                  <p>
+                    L’ingéniosité pragmatique : bâtir des solutions simples et efficaces qui fonctionnent
+                    même dans des environnements contraints.
+                  </p>
+                </div>
+                <div class="pillar-card" data-pillar-idx="2">
+                  <span class="patch-port">OUT·3</span>
+                  <h3>PIXEL · Sens du Détail &amp; UI</h3>
+                  <p>
+                    Chaque pixel et chaque micro-interaction comptent. Une ingénierie puissante mérite
+                    une interface mémorable.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fiches de compétences calibrées -->
+          <div class="skills-grid" id="skills-grid">
+            <article class="panel skill-sheet" data-skill-domain="0">
+              <div class="panel-head-inline">
+                <h3 class="panel-title">Développement Web &amp; Mobile</h3>
+                <span class="mono-tag">5 AXES</span>
+              </div>
+              <ul class="meter-list">
+                <li>
+                  <div class="meter-meta">
+                    <span class="meter-name">TypeScript, JavaScript, Python</span>
+                    <span class="meter-level">[Langages] Intermédiaire</span>
+                  </div>
+                  <div class="meter-track" role="meter" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" aria-label="TypeScript, JavaScript, Python : Intermédiaire">
+                    <span class="meter-fill" style="--pct: 55%"></span>
+                  </div>
+                </li>
+                <li>
+                  <div class="meter-meta">
+                    <span class="meter-name">HTML</span>
+                    <span class="meter-level">[Web] Avancé</span>
+                  </div>
+                  <div class="meter-track" role="meter" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" aria-label="HTML : Avancé">
+                    <span class="meter-fill is-advanced" style="--pct: 80%"></span>
+                  </div>
+                </li>
+                <li>
+                  <div class="meter-meta">
+                    <span class="meter-name">React, Tailwind CSS</span>
+                    <span class="meter-level">[Web] Intermédiaire</span>
+                  </div>
+                  <div class="meter-track" role="meter" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" aria-label="React, Tailwind CSS : Intermédiaire">
+                    <span class="meter-fill" style="--pct: 55%"></span>
+                  </div>
+                </li>
+                <li>
+                  <div class="meter-meta">
+                    <span class="meter-name">Flutter, Dart, C++</span>
+                    <span class="meter-level">[Mobile] Intermédiaire</span>
+                  </div>
+                  <div class="meter-track" role="meter" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" aria-label="Flutter, Dart, C++ : Intermédiaire">
+                    <span class="meter-fill" style="--pct: 55%"></span>
+                  </div>
+                </li>
+                <li>
+                  <div class="meter-meta">
+                    <span class="meter-name">Django</span>
+                    <span class="meter-level">[Backend] Intermédiaire</span>
+                  </div>
+                  <div class="meter-track" role="meter" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" aria-label="Django : Intermédiaire">
+                    <span class="meter-fill" style="--pct: 55%"></span>
+                  </div>
+                </li>
+              </ul>
+            </article>
+
+            <article class="panel skill-sheet" data-skill-domain="1">
+              <div class="panel-head-inline">
+                <h3 class="panel-title">Bases de Données &amp; Systèmes</h3>
+                <span class="mono-tag">4 AXES</span>
+              </div>
+              <ul class="meter-list">
+                <li>
+                  <div class="meter-meta">
+                    <span class="meter-name">SQL (MySQL, PostgreSQL)</span>
+                    <span class="meter-level">[SQL] Intermédiaire</span>
+                  </div>
+                  <div class="meter-track" role="meter" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" aria-label="SQL : Intermédiaire">
+                    <span class="meter-fill" style="--pct: 55%"></span>
+                  </div>
+                </li>
+                <li>
+                  <div class="meter-meta">
+                    <span class="meter-name">NoSQL (MongoDB)</span>
+                    <span class="meter-level">[NoSQL] Intermédiaire</span>
+                  </div>
+                  <div class="meter-track" role="meter" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" aria-label="NoSQL : Intermédiaire">
+                    <span class="meter-fill" style="--pct: 55%"></span>
+                  </div>
+                </li>
+                <li>
+                  <div class="meter-meta">
+                    <span class="meter-name">Linux (Ubuntu, Kali), Windows, Multi-boot</span>
+                    <span class="meter-level">[Systèmes] Avancé</span>
+                  </div>
+                  <div class="meter-track" role="meter" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" aria-label="Systèmes Linux et Windows : Avancé">
+                    <span class="meter-fill is-advanced" style="--pct: 80%"></span>
+                  </div>
+                </li>
+                <li>
+                  <div class="meter-meta">
+                    <span class="meter-name">Git, GitHub, dépôts collaboratifs</span>
+                    <span class="meter-level">[Workflow] Avancé</span>
+                  </div>
+                  <div class="meter-track" role="meter" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" aria-label="Git et GitHub : Avancé">
+                    <span class="meter-fill is-advanced" style="--pct: 80%"></span>
+                  </div>
+                </li>
+              </ul>
+            </article>
+
+            <article class="panel skill-sheet" data-skill-domain="2">
+              <div class="panel-head-inline">
+                <h3 class="panel-title">Réseaux, Sécurité &amp; Création</h3>
+                <span class="mono-tag">4 AXES</span>
+              </div>
+              <ul class="meter-list">
+                <li>
+                  <div class="meter-meta">
+                    <span class="meter-name">Fondamentaux réseaux</span>
+                    <span class="meter-level">[Réseaux] Intermédiaire</span>
+                  </div>
+                  <div class="meter-track" role="meter" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" aria-label="Fondamentaux réseaux : Intermédiaire">
+                    <span class="meter-fill" style="--pct: 55%"></span>
+                  </div>
+                </li>
+                <li>
+                  <div class="meter-meta">
+                    <span class="meter-name">Notions d’audit de sécurité</span>
+                    <span class="meter-level">[Sécurité] Intermédiaire</span>
+                  </div>
+                  <div class="meter-track" role="meter" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" aria-label="Audit de sécurité : Intermédiaire">
+                    <span class="meter-fill" style="--pct: 55%"></span>
+                  </div>
+                </li>
+                <li>
+                  <div class="meter-meta">
+                    <span class="meter-name">Canva, Photoshop, Illustrator</span>
+                    <span class="meter-level">[Design] Intermédiaire</span>
+                  </div>
+                  <div class="meter-track" role="meter" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" aria-label="Design graphique : Intermédiaire">
+                    <span class="meter-fill" style="--pct: 55%"></span>
+                  </div>
+                </li>
+                <li>
+                  <div class="meter-meta">
+                    <span class="meter-name">Marketing, communication digitale, réseaux sociaux</span>
+                    <span class="meter-level">[Com] Avancé</span>
+                  </div>
+                  <div class="meter-track" role="meter" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" aria-label="Communication digitale : Avancé">
+                    <span class="meter-fill is-advanced" style="--pct: 80%"></span>
+                  </div>
+                </li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- SECTION 5 : ATELIER INTERACTIF — TERMINAL HAWK-SH & LABO 225-PX   -->
+      <!-- ================================================================= -->
+      <section class="section-band" id="atelier">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">INSTRUMENTS EN DIRECT // CONSOLE &amp; AUTOMATE CELLULAIRE</p>
+              <h2 class="section-title">Atelier Interactif</h2>
+            </div>
+            <p class="section-note">
+              Interrogez le terminal <code>hawk-sh</code> ou peignez directement sur la matrice cellulaire <code>225-Pixel</code>.
+            </p>
+          </div>
+
+          <div class="atelier-grid">
+            <!-- Terminal hawk-sh -->
+            <div class="panel terminal-panel" id="terminal">
+              <div class="bench-bar">
+                <div class="bench-bar-left">
+                  <span class="mono-tag">HAWK-SH // GRAYHAWK225-PIXEL@ABIDJAN</span>
+                </div>
+                <span class="mono-readout">UTF-8 · CONSOLE</span>
+              </div>
+
+              <div class="terminal-output" id="terminal-output" role="log" aria-live="polite" aria-label="Sortie du terminal hawk-sh"></div>
+
+              <div class="terminal-footer">
+                <div class="quick-cmds" role="group" aria-label="Commandes rapides">
+                  <button type="button" class="chip-btn" data-cmd="help">help</button>
+                  <button type="button" class="chip-btn" data-cmd="whoami">whoami</button>
+                  <button type="button" class="chip-btn" data-cmd="github">github</button>
+                  <button type="button" class="chip-btn" data-cmd="skills">skills</button>
+                  <button type="button" class="chip-btn" data-cmd="projects">projects</button>
+                  <button type="button" class="chip-btn" data-cmd="225">225</button>
+                  <button type="button" class="chip-btn" data-cmd="contact">contact</button>
+                  <button type="button" class="chip-btn" data-cmd="clear">clear</button>
+                </div>
+
+                <form id="terminal-form" class="terminal-form">
+                  <label for="terminal-input" class="terminal-prompt">hawk@225:~$</label>
+                  <input
+                    id="terminal-input"
+                    type="text"
+                    autocomplete="off"
+                    spellcheck="false"
+                    placeholder="Tapez une commande (help, whoami, 225, theme)..."
+                  />
+                  <button type="submit" class="btn btn-primary btn-compact">Exécuter</button>
+                </form>
+              </div>
+            </div>
+
+            <!-- Labo 225-Pixel : Automate de Conway Canvas 2D + Mode Trame Risographique -->
+            <div class="panel pixellab-panel" id="labo">
+              <div class="bench-bar">
+                <div class="bench-bar-left">
+                  <span class="mono-tag">LABO // MATRICE 225-PIXEL &amp; CONWAY</span>
+                </div>
+                <div class="bench-bar-right">
+                  <button type="button" id="pixel-render-mode" class="chip-btn" aria-pressed="false">
+                    Trame Riso : OFF
+                  </button>
+                </div>
+              </div>
+
+              <div class="pixel-toolbar">
+                <button type="button" id="pixel-play-btn" class="btn btn-primary btn-compact" aria-pressed="false">
+                  Simuler Vie
+                </button>
+                <button type="button" id="pixel-step-btn" class="chip-btn">Pas +1</button>
+                <button type="button" class="chip-btn" data-pixel-preset="hawk">Emblème Hawk</button>
+                <button type="button" class="chip-btn" data-pixel-preset="code225">Preset #225</button>
+                <button type="button" id="pixel-chaos-btn" class="chip-btn">Chaos</button>
+                <button type="button" id="pixel-clear-btn" class="chip-btn">Effacer</button>
+              </div>
+
+              <div class="pixel-canvas-shell">
+                <canvas
+                  id="pixel-canvas"
+                  class="pixel-canvas"
+                  tabindex="0"
+                  role="application"
+                  aria-label="Matrice 225-Pixel interactive : cliquez ou glissez pour activer des cellules, utilisez les flèches et Espace au clavier"
+                ></canvas>
+              </div>
+
+              <div class="pixel-telemetry">
+                <span>CELLULES : <strong id="pixel-active-count">0</strong> / 392</span>
+                <span>GÉNÉRATION : <strong id="pixel-gen-count">#0</strong></span>
+                <label class="hz-control" for="pixel-hz">
+                  <span>CADENCE</span>
+                  <input id="pixel-hz" type="range" min="2" max="12" step="1" value="6" />
+                  <span id="pixel-hz-val">6 Hz</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- SECTION 6 : CANAL DE TRANSMISSION (CONTACT)                       -->
+      <!-- ================================================================= -->
+      <section class="section-band" id="contact">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">TRANSMISSION DIRECTE // ABIDJAN, CÔTE D’IVOIRE</p>
+              <h2 class="section-title">Travaillons ensemble.</h2>
+            </div>
+            <p class="section-note">
+              Vous proposez un stage, un projet collaboratif ou une opportunité dans le numérique ? Écrivez-moi : je réponds avec plaisir.
+            </p>
+          </div>
+
+          <div class="contact-grid">
+            <aside class="panel contact-info-panel">
+              <h3 class="panel-title">Coordonnées directes</h3>
+
+              <ul class="contact-links">
+                <li class="contact-row">
+                  <a href="mailto:onikoyamou9@gmail.com" class="contact-link">
+                    <span class="mono-label">EMAIL</span>
+                    <strong>onikoyamou9@gmail.com</strong>
+                  </a>
+                  <button type="button" class="chip-btn copy-btn" data-copy="onikoyamou9@gmail.com" aria-label="Copier l'adresse email">
+                    Copier
+                  </button>
+                </li>
+                <li class="contact-row">
+                  <a href="tel:+2250545086784" class="contact-link">
+                    <span class="mono-label">TÉLÉPHONE</span>
+                    <strong>+225 0545086784</strong>
+                  </a>
+                  <button type="button" class="chip-btn copy-btn" data-copy="+225 0545086784" aria-label="Copier le numéro de téléphone">
+                    Copier
+                  </button>
+                </li>
+                <li class="contact-row">
+                  <a
+                    href="https://github.com/grayhawk225-pixel"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="contact-link"
+                  >
+                    <span class="mono-label">GITHUB</span>
+                    <strong>github.com/grayhawk225-pixel</strong>
+                  </a>
+                  <span class="mono-tag">PUBLIC</span>
+                </li>
+                <li class="contact-row static-row">
+                  <div class="contact-link">
+                    <span class="mono-label">LOCALISATION</span>
+                    <strong>Abidjan, Côte d’Ivoire</strong>
+                  </div>
+                  <span class="mono-tag">UTC+0</span>
+                </li>
+              </ul>
+
+              <div class="availability-box">
+                <span class="mono-label">DISPONIBILITÉ</span>
+                <strong>Stage / Projets collaboratifs</strong>
+              </div>
+            </aside>
+
+            <form id="contact-form" class="panel contact-form-panel">
+              <div class="form-row-2">
+                <div class="field-group">
+                  <label for="contact-nom">IDENTIFIANT // NOM</label>
+                  <input
+                    id="contact-nom"
+                    name="name"
+                    type="text"
+                    autocomplete="name"
+                    required
+                    placeholder="Ex : Sarah Koné / CTO"
+                  />
+                </div>
+                <div class="field-group">
+                  <label for="contact-email">CANAL RETOUR // EMAIL</label>
+                  <input
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    autocomplete="email"
+                    required
+                    placeholder="sarah@entreprise.com"
+                  />
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label for="contact-mission">NATURE DE LA MISSION</label>
+                <select id="contact-mission" name="missionType">
+                  <option value="Stage / Projet collaboratif">Stage / Projet collaboratif</option>
+                  <option value="Développement Web (React / TypeScript)">Développement Web (React / TypeScript)</option>
+                  <option value="Application Mobile (Flutter / Dart)">Application Mobile (Flutter / Dart)</option>
+                  <option value="Collaboration Open-Source sur GitHub">Collaboration Open-Source sur GitHub</option>
+                </select>
+              </div>
+
+              <div class="field-group">
+                <label for="contact-message">PAYLOAD // DÉTAILS DU PROJET</label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  rows="4"
+                  required
+                  placeholder="Décrivez vos objectifs techniques, vos délais ou votre vision..."
+                ></textarea>
+              </div>
+
+              <div class="form-actions">
+                <span class="mono-label muted">Ouvre votre application mail (aucun stockage serveur)</span>
+                <button type="submit" class="btn btn-primary">Envoyer le message</button>
+              </div>
+
+              <div id="contact-feedback" class="form-feedback" role="status" aria-live="polite" hidden></div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- =================================================================== -->
+    <!-- PIED DE PAGE CALIBRÉ                                                -->
+    <!-- =================================================================== -->
+    <footer class="site-footer">
+      <div class="shell footer-row">
+        <div class="footer-left">
+          <span class="status-led" aria-hidden="true"></span>
+          <span>MOÏSE ONIKOYAMOU · GRAYHAWK // 225-PIXEL · ESATIC ABIDJAN</span>
+        </div>
+        <div class="footer-right">
+          <a href="https://github.com/grayhawk225-pixel" target="_blank" rel="noopener noreferrer">
+            GITHUB.COM/GRAYHAWK225-PIXEL
+          </a>
+          <span aria-hidden="true">·</span>
+          <a href="#top">RETOUR HAUT</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- =================================================================== -->
+    <!-- FENÊTRE D'INSPECTION D'ARCHITECTURE & RISOGRAPHIE 2 ENCRES          -->
+    <!-- =================================================================== -->
+    <div
+      id="arch-modal"
+      class="modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="arch-modal-title"
+      hidden
+    >
+      <div class="modal-sheet">
+        <div class="modal-header">
+          <div>
+            <span class="mono-tag" id="arch-modal-lang">PLAN D’ARCHITECTURE</span>
+            <h3 class="modal-title" id="arch-modal-title">Projet</h3>
+          </div>
+          <button type="button" id="arch-modal-close" class="chip-btn" aria-label="Fermer la fenêtre d'architecture">
+            Fermer (Échap)
+          </button>
+        </div>
+
+        <p class="modal-desc" id="arch-modal-desc"></p>
+
+        <!-- Planche Risographie 2 encres du pipeline -->
+        <div class="riso-stage-box">
+          <div class="bench-bar">
+            <span class="mono-tag">PLANCHE RISOGRAPHIE // PIPELINE SYSTÈME</span>
+            <label class="riso-offset-control" for="riso-offset">
+              <span class="mono-label">Repérage</span>
+              <input id="riso-offset" type="range" min="-14" max="14" step="1" value="5" />
+              <span class="mono-readout" id="riso-offset-val">+5px</span>
+            </label>
+          </div>
+          <div class="riso-viewport" id="riso-viewport">
+            <div class="riso-plate riso-plate-a" id="riso-plate-a" aria-hidden="true"></div>
+            <div class="riso-plate riso-plate-b" id="riso-plate-b" aria-hidden="true"></div>
+            <ol class="pipeline-steps" id="arch-modal-nodes"></ol>
+          </div>
+        </div>
+
+        <div class="code-box">
+          <div class="code-box-head">
+            <span class="mono-label">SIGNATURE DU DÉPÔT</span>
+            <span class="mono-readout" id="arch-modal-meta"></span>
+          </div>
+          <pre><code id="arch-modal-snippet"></code></pre>
+        </div>
+
+        <div class="modal-actions">
+          <a id="arch-modal-demo" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" hidden>
+            Ouvrir la démo en ligne
+          </a>
+          <a id="arch-modal-github" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            Ouvrir sur GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script src="./js/atelier.js" defer></script>
   </body>
 </html>
