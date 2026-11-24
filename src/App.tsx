@@ -518,6 +518,10 @@ function ScrambleText({ text, className = '' }) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#/_-225<>[]*';
 
   const triggerScramble = useCallback(() => {
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setDisplayed(text);
+      return () => {};
+    }
     let iteration = 0;
     const interval = setInterval(() => {
       setDisplayed(
@@ -867,6 +871,7 @@ function PixelLabSandbox({ theme }) {
             onClick={clearGrid}
             className="p-1.5 rounded-lg text-xs font-mono bg-slate-800/90 hover:bg-rose-950/60 text-slate-400 hover:text-rose-300 border border-slate-700 transition"
             title="Effacer la matrice"
+            aria-label="Effacer la matrice"
           >
             <RotateCcw className="w-3.5 h-3.5" />
           </button>
@@ -876,8 +881,8 @@ function PixelLabSandbox({ theme }) {
       {/* Grille Pixel Interactive */}
       <div
         className="w-full overflow-x-auto pb-2 select-none"
-        onMouseLeave={() => setIsDrawing(false)}
-        onMouseUp={() => setIsDrawing(false)}
+        onPointerLeave={() => setIsDrawing(false)}
+        onPointerUp={() => setIsDrawing(false)}
       >
         <div
           className="grid gap-1 mx-auto bg-slate-950/90 p-3 rounded-xl border border-slate-800/80"
@@ -890,11 +895,11 @@ function PixelLabSandbox({ theme }) {
             row.map((cell, cIdx) => (
               <div
                 key={`${rIdx}-${cIdx}`}
-                onMouseDown={() => {
+                onPointerDown={() => {
                   setIsDrawing(true);
                   toggleCell(rIdx, cIdx);
                 }}
-                onMouseEnter={() => {
+                onPointerEnter={() => {
                   if (isDrawing) toggleCell(rIdx, cIdx);
                 }}
                 className={`aspect-square rounded-[2px] cursor-crosshair transition-all duration-100 ${
@@ -908,7 +913,7 @@ function PixelLabSandbox({ theme }) {
         </div>
       </div>
 
-      <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mt-3 pt-2 border-t border-slate-800/60">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-xs font-mono text-slate-400 mt-3 pt-3 border-t border-slate-800/60">
         <span>CELLULES ACTIVES : <strong className={theme.accentText}>{activePixels}</strong> / {ROWS * COLS}</span>
         <span>GÉNÉRATION : <strong className="text-white">#{generation}</strong></span>
         <span className="hidden sm:inline">MODE : AUTOMATE TOROÏDAL 2D</span>
@@ -999,6 +1004,16 @@ export default function App() {
   useEffect(() => {
     fetchGithubData();
   }, [fetchGithubData]);
+
+  // Fermeture de la fenêtre d'architecture avec la touche Échap
+  useEffect(() => {
+    if (!inspectedProject) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setInspectedProject(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [inspectedProject]);
 
   // Fusion intelligente des dépôts GitHub en direct et des projets d'ingénierie phares
   const allProjects = useMemo(() => {
@@ -1177,6 +1192,8 @@ export default function App() {
 
   return (
     <div className={`min-h-screen ${theme.bgPrimary} text-slate-100 relative selection:bg-emerald-500 selection:text-slate-950 font-sans overflow-x-hidden`}>
+      <a href="#contenu" className="skip-link">Aller au contenu</a>
+
       {/* Fond Canvas Interactif */}
       <CyberHawkCanvas theme={theme} />
 
@@ -1187,7 +1204,8 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
           {/* Identité & Logo */}
           <a
-            href="#top"
+            href="#contenu"
+            aria-label="Accueil — Moïse Onikoyamou"
             onClick={() => soundFX.playClick(900, 0.03)}
             className="flex items-center gap-3 group"
           >
@@ -1205,7 +1223,7 @@ export default function App() {
                   225-PIXEL
                 </span>
               </div>
-              <div className="text-[11px] font-mono text-slate-400 flex items-center gap-1.5">
+              <div className="text-xs font-mono text-slate-400 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                 <span className="truncate max-w-[180px] sm:max-w-none">
                   github.com/grayhawk225-pixel
@@ -1215,23 +1233,23 @@ export default function App() {
           </a>
 
           {/* Liens de navigation rapide */}
-          <nav className="hidden md:flex items-center gap-6 text-xs font-mono uppercase tracking-wider text-slate-300">
-            <a href="#apropos" className="hover:text-white transition flex items-center gap-1">
+          <nav className="hidden xl:flex items-center gap-5 whitespace-nowrap text-xs font-mono uppercase tracking-wider text-slate-300 [&_svg]:hidden 2xl:[&_svg]:block">
+            <a href="#apropos" className="py-2 hover:text-emerald-300 transition flex items-center gap-1">
               <User className="w-3.5 h-3.5" /> À propos
             </a>
-            <a href="#projets" className="hover:text-white transition flex items-center gap-1">
+            <a href="#projets" className="py-2 hover:text-emerald-300 transition flex items-center gap-1">
               <FolderGit2 className="w-3.5 h-3.5" /> Projets
             </a>
-            <a href="#adn" className="hover:text-white transition flex items-center gap-1">
+            <a href="#adn" className="py-2 hover:text-emerald-300 transition flex items-center gap-1">
               <Cpu className="w-3.5 h-3.5" /> ADN & Stack
             </a>
-            <a href="#terminal" className="hover:text-white transition flex items-center gap-1">
+            <a href="#terminal" className="py-2 hover:text-emerald-300 transition flex items-center gap-1">
               <Terminal className="w-3.5 h-3.5" /> Terminal
             </a>
-            <a href="#labo" className="hover:text-white transition flex items-center gap-1">
+            <a href="#labo" className="py-2 hover:text-emerald-300 transition flex items-center gap-1">
               <Grid className="w-3.5 h-3.5" /> Labo Pixel
             </a>
-            <a href="#contact" className="hover:text-white transition flex items-center gap-1">
+            <a href="#contact" className="py-2 hover:text-emerald-300 transition flex items-center gap-1">
               <Send className="w-3.5 h-3.5" /> Contact
             </a>
           </nav>
@@ -1247,7 +1265,7 @@ export default function App() {
                     soundFX.playClick(1000, 0.03);
                     setThemeKey(t.id);
                   }}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-mono transition ${
+                  className={`px-2.5 py-1 rounded-lg text-xs font-mono transition ${
                     themeKey === t.id
                       ? `${theme.accentBg} text-slate-950 font-bold`
                       : 'text-slate-400 hover:text-white'
@@ -1262,6 +1280,8 @@ export default function App() {
             {/* Bouton Audio Synthétique */}
             <button
               onClick={toggleAudio}
+              aria-pressed={soundEnabled}
+              aria-label="Effets sonores"
               className={`p-2 rounded-xl border transition ${
                 soundEnabled
                   ? `${theme.accentSoft}`
@@ -1273,12 +1293,33 @@ export default function App() {
             </button>
           </div>
         </div>
+        <nav
+          aria-label="Sections"
+          className="mobile-nav xl:hidden flex items-center gap-2 overflow-x-auto px-4 pb-3 text-xs font-mono uppercase tracking-wider"
+        >
+          {[
+            ['#apropos', 'À propos'],
+            ['#projets', 'Projets'],
+            ['#adn', 'Stack'],
+            ['#terminal', 'Terminal'],
+            ['#labo', 'Labo'],
+            ['#contact', 'Contact']
+          ].map(([href, label]) => (
+            <a
+              key={href}
+              href={href}
+              className="shrink-0 min-h-[44px] inline-flex items-center px-3.5 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-200 hover:text-white hover:border-emerald-500/50 transition"
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
       </header>
 
       {/* =================================================================== */}
       {/* CONTENU PRINCIPAL                                                   */}
       {/* =================================================================== */}
-      <main id="top" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-24 space-y-20">
+      <main id="contenu" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-24 space-y-20 sm:space-y-28">
         
         {/* ================================================================= */}
         {/* SECTION 1 : HERO CYBER-TACTIQUE & TÉLÉMÉTRIE GITHUB LIVE          */}
@@ -1293,28 +1334,28 @@ export default function App() {
 
             <div>
               {/* Badge Statut Opérationnel */}
-              <div className="inline-flex flex-wrap items-center gap-2 px-3 py-1.5 rounded-full bg-slate-950/80 border border-slate-800 text-xs font-mono mb-6">
+              <div className="inline-flex flex-wrap items-center gap-x-2 gap-y-1 px-3.5 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs font-mono mb-6">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span className={theme.accentText}>{profile.statusText}</span>
-                <span className="text-slate-600">|</span>
+                <span className="text-slate-600 hidden sm:inline">|</span>
                 <span className="text-slate-400 flex items-center gap-1">
                   <MapPin className="w-3 h-3" /> {profile.location}
                 </span>
               </div>
 
               {/* Titre Principal avec effet de décryptage */}
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.1] mb-4">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.08] mb-6">
                 <ScrambleText text={profile.displayName} className="font-mono" />
-                <span className={`block text-xl sm:text-2xl lg:text-3xl font-semibold mt-3 ${theme.accentText}`}>
+                <span className={`block font-sans text-lg sm:text-2xl lg:text-[1.75rem] font-semibold tracking-normal leading-snug mt-4 ${theme.accentText}`}>
                   {profile.role}
                 </span>
               </h1>
 
               {/* Tagline & Bio */}
-              <p className="text-base sm:text-lg text-slate-200 max-w-2xl leading-relaxed mb-4">
+              <p className="text-base sm:text-lg text-slate-100 max-w-2xl leading-relaxed mb-4">
                 {profile.tagline}
               </p>
-              <p className="text-sm text-slate-400 max-w-2xl leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-300 max-w-2xl leading-relaxed">
                 {githubUser?.bio || profile.bio}
               </p>
             </div>
@@ -1325,7 +1366,7 @@ export default function App() {
                 <a
                   href="#projets"
                   onClick={() => soundFX.playScan()}
-                  className={`px-5 py-3 rounded-xl font-mono text-xs sm:text-sm font-bold ${theme.accentBg} text-slate-950 flex items-center justify-center gap-2 hover:opacity-95 transition shadow-lg`}
+                  className={`px-5 py-3 rounded-xl font-mono text-xs sm:text-sm font-bold ${theme.accentBg} text-slate-950 flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition shadow-lg`}
                 >
                   <Radar className="w-4 h-4" />
                   Explorer mes Systèmes ({allProjects.length})
@@ -1346,13 +1387,13 @@ export default function App() {
 
               {/* Sélecteur de thème mobile */}
               <div className="flex sm:hidden items-center justify-between bg-slate-950/80 p-1.5 rounded-xl border border-slate-800">
-                <span className="text-[11px] font-mono text-slate-400 px-2">Thème :</span>
+                <span className="text-xs font-mono text-slate-400 px-2">Thème :</span>
                 <div className="flex gap-1">
                   {Object.values(THEMES).map((t) => (
                     <button
                       key={t.id}
                       onClick={() => setThemeKey(t.id)}
-                      className={`px-2 py-1 rounded text-[10px] font-mono ${
+                      className={`px-2 py-1 rounded text-[11px] font-mono ${
                         themeKey === t.id ? `${theme.accentBg} text-slate-950 font-bold` : 'text-slate-400'
                       }`}
                     >
@@ -1381,6 +1422,7 @@ export default function App() {
                   }}
                   className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 transition"
                   title="Rafraîchir l'API GitHub"
+                  aria-label="Rafraîchir les données GitHub"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${githubLoading ? 'animate-spin' : ''}`} />
                 </button>
@@ -1412,7 +1454,7 @@ export default function App() {
                   <p className={`text-xs font-mono ${theme.accentText}`}>
                     @{githubUser?.login || 'grayhawk225-pixel'}
                   </p>
-                  <p className="text-[11px] text-slate-400 mt-1">
+                  <p className="text-xs text-slate-400 mt-1">
                     {githubUser?.created_at
                       ? `Membre GitHub depuis ${new Date(githubUser.created_at).getFullYear()}`
                       : 'Ingénierie & Pixel Craft'}
@@ -1423,21 +1465,21 @@ export default function App() {
               {/* Grille de Métriques */}
               <div className="grid grid-cols-2 gap-3 mb-5">
                 <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800/90">
-                  <div className="text-[11px] font-mono text-slate-400">DÉPÔTS PUBLICS</div>
+                  <div className="text-xs font-mono text-slate-400">DÉPÔTS PUBLICS</div>
                   <div className="text-2xl font-mono font-bold text-white mt-1 flex items-baseline gap-2">
                     {githubUser?.public_repos ?? githubRepos.length}
                   </div>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800/90">
-                  <div className="text-[11px] font-mono text-slate-400">FORMATION</div>
+                  <div className="text-xs font-mono text-slate-400">FORMATION</div>
                   <div className="text-2xl font-mono font-bold text-white mt-1 flex items-baseline gap-1">
                     L2<span className={`text-xs ${theme.accentText}`}>TWIN • ESATIC</span>
                   </div>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800/90">
-                  <div className="text-[11px] font-mono text-slate-400">BASE OPÉRATIONNELLE</div>
+                  <div className="text-xs font-mono text-slate-400">BASE OPÉRATIONNELLE</div>
                   <div className="text-sm font-mono font-bold text-white mt-1.5 flex items-center gap-1.5">
                     <Globe className={`w-4 h-4 ${theme.accentText}`} />
                     ABIDJAN #225
@@ -1445,7 +1487,7 @@ export default function App() {
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800/90">
-                  <div className="text-[11px] font-mono text-slate-400">DISPONIBILITÉ</div>
+                  <div className="text-xs font-mono text-slate-400">DISPONIBILITÉ</div>
                   <div className="text-sm font-mono font-bold text-emerald-400 mt-1.5 flex items-center gap-1.5">
                     <Zap className="w-4 h-4" />
                     IMMÉDIATE
@@ -1456,9 +1498,9 @@ export default function App() {
 
             {/* Commutateur de Mode de Données */}
             <div className="p-3 rounded-2xl bg-slate-950/90 border border-slate-800 text-xs">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-mono text-[11px] text-slate-400">SOURCE DES PROJETS :</span>
-                <span className={`font-mono text-[10px] px-1.5 py-0.5 rounded ${theme.accentSoft}`}>
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <span className="font-mono text-xs text-slate-400">SOURCE DES PROJETS :</span>
+                <span className={`font-mono text-[11px] px-1.5 py-0.5 rounded ${theme.accentSoft}`}>
                   {dataSourceMode === 'hybrid' ? 'Hybride (GitHub + Vitrine)' : 'GitHub Strict'}
                 </span>
               </div>
@@ -1468,7 +1510,7 @@ export default function App() {
                     soundFX.playClick(750, 0.03);
                     setDataSourceMode('hybrid');
                   }}
-                  className={`py-1.5 px-2 rounded-lg font-mono text-[11px] transition ${
+                  className={`py-1.5 px-2 rounded-lg font-mono text-xs transition ${
                     dataSourceMode === 'hybrid'
                       ? `${theme.accentBg} text-slate-950 font-bold`
                       : 'bg-slate-900 text-slate-400 hover:text-white'
@@ -1481,7 +1523,7 @@ export default function App() {
                     soundFX.playClick(750, 0.03);
                     setDataSourceMode('live_only');
                   }}
-                  className={`py-1.5 px-2 rounded-lg font-mono text-[11px] transition ${
+                  className={`py-1.5 px-2 rounded-lg font-mono text-xs transition ${
                     dataSourceMode === 'live_only'
                       ? `${theme.accentBg} text-slate-950 font-bold`
                       : 'bg-slate-900 text-slate-400 hover:text-white'
@@ -1509,10 +1551,10 @@ export default function App() {
                 <img
                   src={`${import.meta.env.BASE_URL}photo.jpg`}
                   alt={`Portrait de ${profile.displayName}`}
-                  className={`w-28 h-28 sm:w-36 sm:h-36 shrink-0 rounded-full object-cover border-2 ${theme.border} ${theme.glow}`}
+                  className={`w-28 h-28 sm:w-36 sm:h-36 shrink-0 rounded-full object-cover portrait-ring`}
                 />
                 <div>
-                  <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                  <h2 className="text-2xl sm:text-4xl font-bold text-white tracking-tight">
                     Qui suis-je ?
                   </h2>
                   <p className={`text-xs font-mono mt-1 ${theme.accentText}`}>{profile.displayName}</p>
@@ -1562,10 +1604,10 @@ export default function App() {
                 {ABOUT_DATA.education.map((e) => (
                   <li key={e.years + e.title} className="relative">
                     <span className={`absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full ${theme.accentBg}`} />
-                    <div className={`text-[11px] font-mono ${theme.accentText}`}>{e.years}</div>
+                    <div className={`text-xs font-mono ${theme.accentText}`}>{e.years}</div>
                     <div className="text-sm font-semibold text-white">{e.title}</div>
                     <div className="text-xs text-slate-400">{e.place}</div>
-                    {e.detail && <div className="text-xs text-slate-500">{e.detail}</div>}
+                    {e.detail && <div className="text-xs text-slate-400">{e.detail}</div>}
                   </li>
                 ))}
               </ol>
@@ -1583,7 +1625,7 @@ export default function App() {
                 <FolderGit2 className={`w-4 h-4 ${theme.accentText}`} />
                 <span>RÉPERTOIRE SYSTÈME & DÉPÔTS GITHUB</span>
               </div>
-              <h2 className="text-2xl sm:text-4xl font-bold text-white tracking-tight">
+              <h2 className="section-title text-2xl sm:text-4xl font-bold text-white">
                 Projets & Architectures Déployées
               </h2>
             </div>
@@ -1597,6 +1639,7 @@ export default function App() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Filtrer (React, Dart, TypeScript...)"
+                  aria-label="Filtrer les projets"
                   className="pl-9 pr-3 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/60"
                 />
               </div>
@@ -1605,6 +1648,7 @@ export default function App() {
                 {categories.map((cat) => (
                   <button
                     key={cat}
+                    aria-pressed={selectedCategory === cat}
                     onClick={() => {
                       soundFX.playClick(840, 0.03);
                       setSelectedCategory(cat);
@@ -1627,18 +1671,18 @@ export default function App() {
             {filteredProjects.map((project) => (
               <div
                 key={project.id}
-                className={`group rounded-2xl border ${theme.border} ${theme.bgSecondary} backdrop-blur-xl p-6 flex flex-col justify-between hover:-translate-y-1 transition-all duration-300 relative overflow-hidden`}
+                className={`group rounded-2xl border ${theme.border} ${theme.bgSecondary} backdrop-blur-xl p-6 flex flex-col justify-between card-lift relative overflow-hidden`}
               >
                 <div>
                   {/* En-tête de la carte */}
                   <div className="flex items-center justify-between gap-2 mb-4">
-                    <span className={`px-2.5 py-1 rounded-md text-[11px] font-mono font-medium border ${theme.accentSoft}`}>
+                    <span className={`px-2.5 py-1 rounded-md text-xs font-mono font-medium border ${theme.accentSoft}`}>
                       {project.language}
                     </span>
 
                     <div className="flex items-center gap-3 text-xs font-mono text-slate-400">
                       {project.isLiveGithub && (
-                        <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-[10px]">
+                        <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-[11px]">
                           LIVE API
                         </span>
                       )}
@@ -1654,7 +1698,7 @@ export default function App() {
                   </div>
 
                   {/* Titre & Description */}
-                  <h3 className="text-lg font-bold text-white group-hover:text-emerald-300 transition mb-2 font-mono">
+                  <h3 className="text-lg font-bold text-white group-hover:text-emerald-300 transition mb-2 font-mono leading-snug">
                     {project.title}
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-5">
@@ -1666,7 +1710,7 @@ export default function App() {
                     {project.topics.map((topic, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-0.5 rounded bg-slate-950/90 border border-slate-800 text-[11px] font-mono text-slate-400"
+                        className="px-2 py-0.5 rounded bg-slate-950/90 border border-slate-800 text-xs font-mono text-slate-400"
                       >
                         #{topic}
                       </span>
@@ -1694,6 +1738,7 @@ export default function App() {
                     onClick={() => soundFX.playClick(950, 0.03)}
                     className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition"
                     title="Voir sur GitHub"
+                    aria-label={`Voir ${project.name} sur GitHub`}
                   >
                     <ExternalLink className="w-4 h-4" />
                   </a>
@@ -1712,7 +1757,7 @@ export default function App() {
               <Cpu className={`w-4 h-4 ${theme.accentText}`} />
               <span>CAPACITÉS OPÉRATIONNELLES & STACK TECHNIQUE</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-bold text-white tracking-tight">
+            <h2 className="section-title text-2xl sm:text-4xl font-bold text-white">
               ADN Technique // La Précision du Faucon
             </h2>
           </div>
@@ -1743,7 +1788,7 @@ export default function App() {
                         <div key={idx}>
                           <div className="flex items-center justify-between gap-3 text-xs font-mono mb-1.5">
                             <span className="text-slate-200">{skill.name}</span>
-                            <span className="shrink-0 text-slate-400 text-[11px]">
+                            <span className="shrink-0 text-slate-400 text-xs">
                               [{skill.tag}] {SKILL_LEVELS[skill.level].label}
                             </span>
                           </div>
@@ -1758,7 +1803,7 @@ export default function App() {
                     </div>
                   </div>
 
-                  <div className="mt-6 pt-4 border-t border-slate-800/70 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                  <div className="mt-6 pt-4 border-t border-slate-800/70 flex items-center justify-between text-xs font-mono text-slate-400">
                     <span>NIVEAUX DÉCLARÉS</span>
                     <span className={theme.accentText}>INTERMÉDIAIRE / AVANCÉ</span>
                   </div>
@@ -1824,7 +1869,7 @@ export default function App() {
                   hawk-sh — grayhawk225-pixel@abidjan:~
                 </span>
               </div>
-              <span className="text-[10px] font-mono text-slate-500">UTF-8 // ZSH</span>
+              <span className="text-[11px] font-mono text-slate-400">UTF-8 // ZSH</span>
             </div>
 
             {/* Corps du terminal */}
@@ -1854,13 +1899,13 @@ export default function App() {
             {/* Raccourcis de commandes cliquables + Input */}
             <div className="p-3 bg-slate-900/70 border-t border-slate-800 space-y-2">
               <div className="flex flex-wrap items-center gap-1.5">
-                <span className="text-[10px] font-mono text-slate-400 mr-1">Commandes rapides :</span>
+                <span className="text-[11px] font-mono text-slate-400 mr-1">Commandes rapides :</span>
                 {['help', 'whoami', 'github', 'skills', 'projects', '225', 'clear'].map((cmd) => (
                   <button
                     key={cmd}
                     type="button"
                     onClick={() => runTerminalCommand(cmd)}
-                    className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-mono text-slate-200 border border-slate-700 transition"
+                    className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-200 border border-slate-700 transition"
                   >
                     {cmd}
                   </button>
@@ -1873,10 +1918,11 @@ export default function App() {
                 </span>
                 <input
                   type="text"
+                  aria-label="Commande du terminal"
                   value={terminalInput}
                   onChange={(e) => setTerminalInput(e.target.value)}
                   placeholder="Tapez une commande (ex: whoami, 225, skills)..."
-                  className="flex-1 bg-transparent text-xs font-mono text-white focus:outline-none placeholder-slate-600"
+                  className="flex-1 bg-transparent text-xs font-mono text-white placeholder-slate-400 min-w-0"
                 />
                 <button
                   type="submit"
@@ -1905,7 +1951,7 @@ export default function App() {
                   <Send className={`w-4 h-4 ${theme.accentText}`} />
                   <span>ME CONTACTER</span>
                 </div>
-                <h2 className="text-2xl sm:text-4xl font-bold text-white tracking-tight mb-4">
+                <h2 className="section-title text-2xl sm:text-4xl font-bold text-white mb-5">
                   Travaillons ensemble.
                 </h2>
                 <p className="text-sm text-slate-300 leading-relaxed mb-6">
@@ -1921,7 +1967,7 @@ export default function App() {
                       <Mail className={`w-4 h-4 ${theme.accentText}`} />
                       {profile.email}
                     </span>
-                    <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-white" />
+                    <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-white" />
                   </a>
 
                   <a
@@ -1932,7 +1978,7 @@ export default function App() {
                       <Phone className={`w-4 h-4 ${theme.accentText}`} />
                       {profile.phone}
                     </span>
-                    <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-white" />
+                    <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-white" />
                   </a>
 
                   <a
@@ -1945,7 +1991,7 @@ export default function App() {
                       <Github className={`w-4 h-4 ${theme.accentText}`} />
                       github.com/grayhawk225-pixel
                     </span>
-                    <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-white" />
+                    <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-white" />
                   </a>
 
                   <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
@@ -1967,41 +2013,46 @@ export default function App() {
             <form onSubmit={handleContactSubmit} className="lg:col-span-7 space-y-4 bg-slate-950/70 p-6 rounded-2xl border border-slate-800/90">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-mono text-slate-400 mb-1.5">
+                  <label htmlFor="contact-nom" className="block text-xs font-mono text-slate-300 mb-1.5">
                     IDENTIFIANT // NOM
                   </label>
                   <input
+                    id="contact-nom"
+                    autoComplete="name"
                     type="text"
                     required
                     value={contactForm.name}
                     onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
                     placeholder="Ex: Sarah Koné / CTO"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-sm text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-sm text-white focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30 transition"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-mono text-slate-400 mb-1.5">
+                  <label htmlFor="contact-email" className="block text-xs font-mono text-slate-300 mb-1.5">
                     CANAL RETOUR // EMAIL
                   </label>
                   <input
+                    id="contact-email"
+                    autoComplete="email"
                     type="email"
                     required
                     value={contactForm.email}
                     onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
                     placeholder="sarah@entreprise.com"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-sm text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-sm text-white focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30 transition"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-mono text-slate-400 mb-1.5">
+                <label htmlFor="contact-mission" className="block text-xs font-mono text-slate-300 mb-1.5">
                   NATURE DE LA MISSION
                 </label>
                 <select
+                  id="contact-mission"
                   value={contactForm.missionType}
                   onChange={(e) => setContactForm({ ...contactForm, missionType: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-sm text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-sm text-white focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30 transition"
                 >
                   <option>Stage / Projet collaboratif</option>
                   <option>Développement Web (React / TypeScript)</option>
@@ -2011,28 +2062,29 @@ export default function App() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono text-slate-400 mb-1.5">
+                <label htmlFor="contact-message" className="block text-xs font-mono text-slate-300 mb-1.5">
                   PAYLOAD // DÉTAILS DU PROJET
                 </label>
                 <textarea
+                  id="contact-message"
                   rows={4}
                   required
                   value={contactForm.message}
                   onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
                   placeholder="Décrivez vos objectifs techniques, vos délais ou votre vision..."
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-sm text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-sm text-white focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30 transition"
                 />
               </div>
 
               <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
-                <div className="text-[11px] font-mono text-slate-400 flex items-center gap-1.5">
+                <div className="text-xs font-mono text-slate-400 flex items-center gap-1.5">
                   <Lock className={`w-3.5 h-3.5 ${theme.accentText}`} />
                   Ouvre votre application mail
                 </div>
 
                 <button
                   type="submit"
-                  className={`px-6 py-3 rounded-xl font-mono text-xs sm:text-sm font-bold ${theme.accentBg} text-slate-950 flex items-center gap-2 hover:opacity-95 transition`}
+                  className={`px-6 py-3 rounded-xl font-mono text-xs sm:text-sm font-bold ${theme.accentBg} text-slate-950 flex items-center gap-2 hover:brightness-110 active:scale-[0.98] transition`}
                 >
                   <Send className="w-4 h-4" />
                   Envoyer le message
@@ -2056,7 +2108,15 @@ export default function App() {
       {/* MODAL : INSPECTEUR D'ARCHITECTURE SYSTÈME                           */}
       {/* =================================================================== */}
       {inspectedProject && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div
+          className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Architecture du projet ${inspectedProject.title}`}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setInspectedProject(null);
+          }}
+        >
           <div className={`max-w-2xl w-full rounded-3xl border ${theme.border} bg-slate-900 p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto`}>
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -2069,6 +2129,7 @@ export default function App() {
               </div>
               <button
                 onClick={() => setInspectedProject(null)}
+                aria-label="Fermer la fenêtre"
                 className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300"
               >
                 <X className="w-5 h-5" />
@@ -2090,7 +2151,7 @@ export default function App() {
                     key={i}
                     className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-200 flex flex-col justify-between"
                   >
-                    <span className={`text-[10px] ${theme.accentText}`}>ÉTAPE 0{i + 1}</span>
+                    <span className={`text-[11px] ${theme.accentText}`}>ÉTAPE 0{i + 1}</span>
                     <span className="font-semibold mt-1">{node}</span>
                   </div>
                 ))}
@@ -2135,7 +2196,7 @@ export default function App() {
       {/* FOOTER TACTIQUE                                                     */}
       {/* =================================================================== */}
       <footer className="relative z-10 border-t border-slate-900 bg-slate-950/90 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-400">
           <div className="flex items-center gap-2">
             <span className={`w-2 h-2 rounded-full ${theme.accentBg}`} />
             <span>SYSTÈME CONÇU POUR GRAYHAWK // 225-PIXEL</span>

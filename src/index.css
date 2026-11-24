@@ -1,3 +1,141 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Polices auto-hébergées (licence SIL OFL) : aucune requête vers un CDN */
+@font-face {
+  font-family: 'Golos Text';
+  src: url('/fonts/golos-text-variable.woff2') format('woff2');
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Martian Mono';
+  src: url('/fonts/martian-mono-variable.woff2') format('woff2');
+  font-weight: 400 700;
+  font-stretch: 75% 112.5%;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-feature-settings: 'kern', 'liga';
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Monospace plus compacte : les libellés techniques restent lisibles sur mobile */
+  .font-mono {
+    font-stretch: 88%;
+    font-variant-numeric: tabular-nums;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Focus clavier visible et cohérent sur tous les contrôles */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid rgb(52 211 153);
+    outline-offset: 3px;
+    border-radius: 0.5rem;
+  }
+
+  ::placeholder {
+    color: rgb(148 163 184 / 0.75);
+  }
+}
+
+@layer components {
+  /* Lien d'évitement pour la navigation clavier */
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 100;
+    padding: 0.6rem 1rem;
+    border-radius: 0.75rem;
+    background: rgb(52 211 153);
+    color: rgb(2 6 23);
+    font-weight: 700;
+    transform: translateY(-200%);
+    transition: transform 0.2s ease;
+  }
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+
+  /* Cartes : relief et réaction au survol/focus */
+  .card-lift {
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .card-lift:hover,
+  .card-lift:focus-within {
+    transform: translateY(-4px);
+    border-color: rgb(52 211 153 / 0.55);
+    box-shadow: 0 18px 40px -22px rgb(16 185 129 / 0.55);
+  }
+
+  /* Titre de section : filet d'accent sous le titre */
+  .section-title {
+    position: relative;
+    padding-bottom: 0.9rem;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+  }
+  .section-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 3.5rem;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, rgb(52 211 153), rgb(34 211 238));
+  }
+
+  /* Navigation mobile : défilement horizontal, cibles tactiles ≥ 44 px */
+  .mobile-nav {
+    scrollbar-width: none;
+  }
+  .mobile-nav::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Anneau d'accent autour du portrait */
+.portrait-ring {
+  box-shadow: 0 0 0 4px rgb(2 6 23), 0 0 0 6px rgb(52 211 153 / 0.55), 0 20px 50px -20px rgb(16 185 129 / 0.5);
+}
+
+/* Mouvement réduit : on coupe animations, transitions et défilement animé */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .card-lift:hover,
+  .card-lift:focus-within {
+    transform: none;
+  }
+}
